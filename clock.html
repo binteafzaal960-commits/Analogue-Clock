@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Analogue Clock</title>
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at top, #4a90e2 0%, #1f3b6f 70%);
+      font-family: Arial, sans-serif;
+      color: #fff;
+    }
+
+    .clock {
+      position: relative;
+      width: 320px;
+      height: 320px;
+      border: 12px solid rgba(255, 255, 255, 0.8);
+      border-radius: 50%;
+      background: radial-gradient(circle at center, #0e234b 0%, #071229 65%);
+      box-shadow: 0 0 0 8px rgba(255, 255, 255, 0.08), 0 16px 40px rgba(0, 0, 0, 0.35);
+    }
+
+    .clock::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      box-shadow: inset 0 0 45px rgba(0, 0, 0, 0.5);
+    }
+
+    .hand {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform-origin: bottom center;
+      transform: translateX(-50%) translateY(-100%) rotate(90deg);
+      border-radius: 6px;
+      transition: transform 0.05s ease-in-out;
+      z-index: 2;
+    }
+
+    .hand.hour {
+      width: 10px;
+      height: 90px;
+      background: linear-gradient(180deg, #fff, #d8d8d8);
+    }
+
+    .hand.minute {
+      width: 8px;
+      height: 125px;
+      background: linear-gradient(180deg, #f7f7f7, #c4c4c4);
+    }
+
+    .hand.second {
+      width: 4px;
+      height: 145px;
+      background: #ff5c5c;
+    }
+
+    .center-pin {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 18px;
+      height: 18px;
+      background: #fff;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 16px rgba(255, 255, 255, 0.2);
+      z-index: 3;
+    }
+
+    .number {
+      position: absolute;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 1rem;
+      font-weight: 600;
+      pointer-events: none;
+    }
+
+    .mark {
+      position: absolute;
+      width: 4px;
+      height: 16px;
+      background: rgba(255, 255, 255, 0.75);
+      left: 50%;
+      top: 16px;
+      transform-origin: center 140px;
+    }
+  </style>
+</head>
+<body>
+  <div class="clock" id="clock">
+    <div class="hand hour" id="hour-hand"></div>
+    <div class="hand minute" id="minute-hand"></div>
+    <div class="hand second" id="second-hand"></div>
+    <div class="center-pin"></div>
+    <div class="number" style="top: 18px; left: 50%; transform: translateX(-50%);">12</div>
+    <div class="number" style="top: 50%; right: 18px; transform: translateY(-50%);">3</div>
+    <div class="number" style="bottom: 18px; left: 50%; transform: translateX(-50%);">6</div>
+    <div class="number" style="top: 50%; left: 18px; transform: translateY(-50%);">9</div>
+  </div>
+
+  <script>
+    const hourHand = document.getElementById('hour-hand');
+    const minuteHand = document.getElementById('minute-hand');
+    const secondHand = document.getElementById('second-hand');
+
+    function updateClock() {
+      const now = new Date();
+      const seconds = now.getSeconds();
+      const minutes = now.getMinutes();
+      const hours = now.getHours() % 12;
+
+      const secondsDegree = seconds * 6;
+      const minutesDegree = minutes * 6 + seconds * 0.1;
+      const hoursDegree = hours * 30 + minutes * 0.5;
+
+      secondHand.style.transform = `translateX(-50%) translateY(-100%) rotate(${secondsDegree}deg)`;
+      minuteHand.style.transform = `translateX(-50%) translateY(-100%) rotate(${minutesDegree}deg)`;
+      hourHand.style.transform = `translateX(-50%) translateY(-100%) rotate(${hoursDegree}deg)`;
+    }
+
+    updateClock();
+    setInterval(updateClock, 1000);
+  </script>
+</body>
+</html>
